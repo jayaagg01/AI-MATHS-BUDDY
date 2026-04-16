@@ -3,284 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Maths Buddy - Master Mathematics with AI</title>
+    <title>AI Maths Buddy - Your Personal Math Tutor</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
-        }
-
-        .glass-morphism {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .hero-gradient {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .card-hover:hover {
-            transform: translateY(-5px);
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .whatsapp-btn {
-            background-color: #25D366;
-            transition: transform 0.2s;
-        }
-
-        .whatsapp-btn:hover {
-            background-color: #128C7E;
-            transform: scale(1.05);
-        }
-
-        .math-symbol {
-            position: absolute;
-            opacity: 0.1;
-            z-index: 0;
-            pointer-events: none;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .hero-gradient { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); }
+        .whatsapp-btn { background-color: #25D366; transition: all 0.2s ease; }
+        .whatsapp-btn:hover { background-color: #128C7E; transform: translateY(-2px); }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body class="bg-slate-50 text-slate-900">
 
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 glass-morphism py-4 px-6 md:px-12 flex justify-between items-center shadow-sm">
+    <!-- Simple Navbar -->
+    <nav class="py-6 px-6 md:px-12 flex justify-between items-center bg-white shadow-sm sticky top-0 z-50">
         <div class="flex items-center space-x-2">
-            <div class="bg-indigo-600 p-2 rounded-lg">
-                <i class="fas fa-calculator text-white text-xl"></i>
-            </div>
-            <span class="text-xl font-bold tracking-tight text-indigo-900">AI Maths Buddy</span>
+            <i class="fas fa-calculator text-indigo-600 text-2xl"></i>
+            <span class="text-xl font-bold tracking-tight">AI Maths Buddy</span>
         </div>
-        <div class="hidden md:flex space-x-8 font-medium">
-            <a href="#features" class="hover:text-indigo-600 transition">Features</a>
-            <a href="#how-it-works" class="hover:text-indigo-600 transition">How it Works</a>
-            <a href="#community" class="hover:text-indigo-600 transition">Community</a>
-        </div>
-        <a href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank" class="whatsapp-btn text-white px-5 py-2 rounded-full font-semibold text-sm flex items-center">
+        <a href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank" class="whatsapp-btn text-white px-5 py-2 rounded-lg font-semibold text-sm flex items-center shadow-md">
             <i class="fab fa-whatsapp mr-2 text-lg"></i> Join Group
         </a>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="relative pt-32 pb-20 px-6 md:px-12 overflow-hidden hero-gradient text-white">
-        <!-- Floating Icons Background -->
-        <i class="fas fa-square-root-variable math-symbol text-8xl top-20 left-10 rotate-12"></i>
-        <i class="fas fa-infinity math-symbol text-9xl bottom-10 right-20 -rotate-12"></i>
-        <i class="fas fa-percentage math-symbol text-6xl top-40 right-40 rotate-45"></i>
-
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center relative z-10">
-            <div class="md:w-1/2 mb-12 md:mb-0">
-                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-                    Stop Struggling with <span class="underline decoration-yellow-400">Hard Maths</span> Questions.
-                </h1>
-                <p class="text-lg md:text-xl opacity-90 mb-8 max-w-lg leading-relaxed">
-                    Upload any problem, get instant conceptual breakthroughs, and master topics through personalized AI-powered coaching.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <button onclick="scrollToSection('features')" class="bg-white text-indigo-700 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition shadow-lg">
-                        Explore Features
-                    </button>
-                    <a href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank" class="whatsapp-btn text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center">
-                        <i class="fab fa-whatsapp mr-2"></i> Join Our Group
-                    </a>
-                </div>
-            </div>
-            <div class="md:w-1/2 flex justify-center">
-                <div class="bg-white p-4 rounded-3xl shadow-2xl relative max-w-sm w-full">
-                    <div class="bg-gray-100 rounded-2xl p-6 border-2 border-dashed border-indigo-200">
-                        <div class="flex flex-col items-center text-center py-10">
-                            <i class="fas fa-cloud-upload-alt text-5xl text-indigo-500 mb-4"></i>
-                            <h3 class="text-gray-800 font-bold text-xl">Upload Your Question</h3>
-                            <p class="text-gray-500 text-sm mt-2">JPEG, PNG or PDF accepted</p>
-                            <button class="mt-6 bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700">Choose File</button>
-                        </div>
-                    </div>
-                    <!-- Badge -->
-                    <div class="absolute -bottom-6 -left-6 bg-yellow-400 text-indigo-900 p-4 rounded-2xl shadow-xl font-bold flex items-center">
-                        <i class="fas fa-bolt mr-2"></i> Instant Explanations
-                    </div>
-                </div>
+    <!-- Crisp Hero Section -->
+    <header class="hero-gradient text-white py-20 px-6 md:px-12 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
+                Solve Hard Maths Problems <br class="hidden md:block"> with AI Coaching.
+            </h1>
+            <p class="text-xl opacity-90 mb-10 max-w-2xl mx-auto">
+                Upload a photo of any math question. Get instant explanations, understand core concepts, and practice with similar questions.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank" class="whatsapp-btn text-white px-10 py-4 rounded-xl font-bold text-lg shadow-xl flex items-center justify-center">
+                    <i class="fab fa-whatsapp mr-3 text-2xl"></i> Get Started on WhatsApp
+                </a>
             </div>
         </div>
     </header>
 
-    <!-- Features Section -->
-    <section id="features" class="py-20 px-6 md:px-12 max-w-7xl mx-auto">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Why Students Love Us</h2>
-            <div class="h-1 w-20 bg-indigo-600 mx-auto"></div>
-        </div>
-
-        <div class="grid md:grid-grid-cols-3 gap-8">
+    <!-- To the Point Features -->
+    <section class="py-16 px-6 md:px-12 max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-3 gap-10">
             <!-- Feature 1 -->
-            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 card-hover">
-                <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
-                    <i class="fas fa-camera text-blue-600 text-2xl"></i>
+            <div class="text-center p-6">
+                <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-upload text-2xl"></i>
                 </div>
-                <h3 class="text-xl font-bold mb-4">Snap & Solve</h3>
-                <p class="text-gray-600">Simply upload a photo of your handwritten or printed math problem. Our AI recognizes complex symbols instantly.</p>
+                <h3 class="text-xl font-bold mb-3">Upload Questions</h3>
+                <p class="text-slate-600">Snap a photo of any tough math problem. Our AI reads handwriting and symbols perfectly.</p>
             </div>
 
             <!-- Feature 2 -->
-            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 card-hover">
-                <div class="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
-                    <i class="fas fa-lightbulb text-purple-600 text-2xl"></i>
+            <div class="text-center p-6">
+                <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-brain text-2xl"></i>
                 </div>
-                <h3 class="text-xl font-bold mb-4">Deep Concepts</h3>
-                <p class="text-gray-600">We don't just give answers. We break down the "Why" behind every step so you actually learn the theory.</p>
+                <h3 class="text-xl font-bold mb-3">Master Concepts</h3>
+                <p class="text-slate-600">Don't just get the answer. We explain the "why" and "how" behind every single step.</p>
             </div>
 
             <!-- Feature 3 -->
-            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 card-hover">
-                <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center mb-6">
-                    <i class="fas fa-dumbbell text-green-600 text-2xl"></i>
+            <div class="text-center p-6">
+                <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-repeat text-2xl"></i>
                 </div>
-                <h3 class="text-xl font-bold mb-4">Adaptive Training</h3>
-                <p class="text-gray-600">Once you solve a problem, get "Helping Questions" that are slightly different to ensure the concept is locked in.</p>
+                <h3 class="text-xl font-bold mb-3">Practice Buddy</h3>
+                <p class="text-slate-600">Get 3 similar "helping questions" after every solution to ensure you've truly mastered the topic.</p>
             </div>
         </div>
     </section>
 
-    <!-- How it Works (Interactive UI) -->
-    <section id="how-it-works" class="py-20 bg-indigo-50 px-6 md:px-12">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex flex-col md:flex-row items-center gap-12">
-                <div class="md:w-1/2">
-                    <h2 class="text-3xl font-bold mb-8">Master any topic in 3 steps</h2>
-                    
-                    <div class="space-y-6">
-                        <div class="flex items-start space-x-4">
-                            <div class="bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-1 font-bold">1</div>
-                            <div>
-                                <h4 class="font-bold text-lg">Input your Doubt</h4>
-                                <p class="text-gray-600">Upload a screenshot or photo of your textbook question.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-4">
-                            <div class="bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-1 font-bold">2</div>
-                            <div>
-                                <h4 class="font-bold text-lg">Analyze the Breakdown</h4>
-                                <p class="text-gray-600">Follow our AI's step-by-step logic and interactive diagrams.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-4">
-                            <div class="bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-1 font-bold">3</div>
-                            <div>
-                                <h4 class="font-bold text-lg">Challenge Yourself</h4>
-                                <p class="text-gray-600">Solve 3 similar problems generated specifically for your level.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="md:w-1/2 bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-200">
-                    <div class="bg-gray-100 px-4 py-2 border-b flex items-center justify-between">
-                        <div class="flex space-x-2">
-                            <div class="w-3 h-3 bg-red-400 rounded-full"></div>
-                            <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                            <div class="w-3 h-3 bg-green-400 rounded-full"></div>
-                        </div>
-                        <span class="text-xs text-gray-400 font-mono">ai-maths-buddy-v1.0</span>
-                    </div>
-                    <div class="p-6">
-                        <div class="bg-indigo-50 p-4 rounded-lg mb-4 border-l-4 border-indigo-500">
-                            <p class="italic text-gray-700">"Solve for x: 2x² - 4x - 6 = 0"</p>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white text-xs">AI</div>
-                                <div class="bg-gray-100 p-3 rounded-2xl rounded-tl-none text-sm text-gray-800">
-                                    Great! To solve this quadratic, we first factor out the 2...
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-3 justify-end">
-                                <div class="bg-indigo-100 p-3 rounded-2xl rounded-tr-none text-sm text-indigo-800">
-                                    Why do we factor it first?
-                                </div>
-                                <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-xs">YOU</div>
-                            </div>
-                            <div class="animate-pulse flex items-center space-x-3">
-                                <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white text-xs">AI</div>
-                                <div class="h-4 bg-gray-200 w-2/3 rounded"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Community Section -->
-    <section id="community" class="py-20 px-6 md:px-12 text-center">
-        <div class="max-w-4xl mx-auto bg-gray-900 rounded-[3rem] p-10 md:p-20 text-white relative overflow-hidden shadow-2xl">
-            <!-- Background glow -->
-            <div class="absolute -top-24 -left-24 w-64 h-64 bg-indigo-600 rounded-full blur-[100px] opacity-30"></div>
-            <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-purple-600 rounded-full blur-[100px] opacity-30"></div>
-
-            <h2 class="text-3xl md:text-5xl font-bold mb-6 relative z-10">Join our Learning Circle</h2>
-            <p class="text-lg md:text-xl text-gray-400 mb-10 relative z-10">
-                Connect with thousands of students, share problems, and get early access to our full AI platform.
+    <!-- Simple Community CTA -->
+    <section class="py-20 bg-slate-100 px-6 border-t border-b border-slate-200">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-6">Ready to improve your grades?</h2>
+            <p class="text-lg text-slate-600 mb-8">
+                Join our exclusive WhatsApp community for early access, math tips, and direct support from the AI Maths Buddy team.
             </p>
-            
-            <div class="flex flex-col items-center relative z-10">
-                <a href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank" class="whatsapp-btn flex items-center px-10 py-5 rounded-2xl text-xl font-bold shadow-2xl hover:scale-105 transition transform">
-                    <i class="fab fa-whatsapp mr-4 text-3xl"></i> Join the WhatsApp Group
-                </a>
-                <p class="mt-6 text-sm text-gray-500 font-medium uppercase tracking-widest">Free to join • Peer Support • 24/7 AI Insights</p>
-            </div>
+            <a href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank" class="whatsapp-btn text-white px-12 py-5 rounded-2xl text-xl font-bold shadow-lg inline-flex items-center">
+                <i class="fab fa-whatsapp mr-3 text-2xl"></i> Join the Group Now
+            </a>
+            <p class="mt-4 text-sm text-slate-400 font-medium">100% Free • No Spam • Student Focused</p>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t py-12 px-6 md:px-12">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
-            <div class="flex items-center space-x-2 mb-6 md:mb-0">
-                <div class="bg-indigo-600 p-1.5 rounded-lg">
-                    <i class="fas fa-calculator text-white text-sm"></i>
-                </div>
-                <span class="text-lg font-bold text-indigo-900">AI Maths Buddy</span>
-            </div>
-            <div class="flex space-x-6 text-gray-500 text-sm">
-                <a href="#" class="hover:text-indigo-600">Privacy Policy</a>
-                <a href="#" class="hover:text-indigo-600">Terms of Service</a>
-                <a href="#" class="hover:text-indigo-600">Contact Support</a>
-            </div>
-            <div class="mt-6 md:mt-0 text-gray-400 text-sm">
-                &copy; 2024 AI Maths Buddy. Empowering students worldwide.
-            </div>
+    <!-- Compact Footer -->
+    <footer class="py-10 px-6 text-center text-slate-500 text-sm">
+        <div class="flex justify-center space-x-6 mb-4">
+            <a href="#" class="hover:underline">Contact</a>
+            <a href="#" class="hover:underline">Privacy</a>
+            <a href="#" class="hover:underline">Terms</a>
         </div>
+        <p>&copy; 2024 AI Maths Buddy. All rights reserved.</p>
     </footer>
 
-    <script>
-        // Smooth scroll for anchors
-        function scrollToSection(id) {
-            document.getElementById(id).scrollIntoView({
-                behavior: 'smooth'
-            });
-        }
-
-        // Intersection Observer for scroll animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('opacity-100', 'translate-y-0');
-                    entry.target.classList.remove('opacity-0', 'translate-y-10');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        // Apply fade-in to feature cards
-        document.querySelectorAll('.card-hover').forEach(card => {
-            card.classList.add('transition', 'duration-700', 'opacity-0', 'translate-y-10');
-            observer.observe(card);
-        });
-    </script>
 </body>
 </html>
