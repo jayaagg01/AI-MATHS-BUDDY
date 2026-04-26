@@ -12,93 +12,156 @@
         .hero-gradient { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); }
         .whatsapp-btn { background-color: #25D366; transition: all 0.2s ease; }
         .whatsapp-btn:hover { background-color: #128C7E; transform: translateY(-2px); }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.3);
+            cursor: pointer;
+            z-index: 10;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
+<body class="bg-slate-50 text-slate-900 flex flex-col min-h-screen">
 
     <!-- Simple Navbar -->
-    <nav class="py-6 px-6 md:px-12 flex justify-between items-center bg-white shadow-sm sticky top-0 z-50">
+    <nav class="py-4 px-6 md:px-12 flex justify-between items-center bg-white shadow-sm sticky top-0 z-50">
         <div class="flex items-center space-x-2">
             <i class="fas fa-calculator text-indigo-600 text-2xl"></i>
             <span class="text-xl font-bold tracking-tight">AI Maths Buddy</span>
         </div>
-        <a href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank" class="whatsapp-btn text-white px-5 py-2 rounded-lg font-semibold text-sm flex items-center shadow-md">
-            <i class="fab fa-whatsapp mr-2 text-lg"></i> Join Group
+        <a href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank" class="whatsapp-btn text-white px-4 py-2 rounded-lg font-semibold text-sm flex items-center shadow-md">
+            <i class="fab fa-whatsapp mr-2 text-lg"></i> Join Now
         </a>
     </nav>
 
-    <!-- Crisp Hero Section -->
-    <header class="hero-gradient text-white py-20 px-6 md:px-12 text-center">
-        <div class="max-w-4xl mx-auto">
-            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
-                Solve Hard Maths Problems <br class="hidden md:block"> with AI Coaching.
-            </h1>
-            <p class="text-xl opacity-90 mb-10 max-w-2xl mx-auto">
-                Upload a photo of any math question. Get instant explanations, understand core concepts, and practice with similar questions.
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank" class="whatsapp-btn text-white px-10 py-4 rounded-xl font-bold text-lg shadow-xl flex items-center justify-center">
-                    <i class="fab fa-whatsapp mr-3 text-2xl"></i> Get Started on WhatsApp
-                </a>
+    <!-- Main Content -->
+    <main class="flex-grow">
+        <!-- Hero & VSL Section -->
+        <header class="hero-gradient text-white pt-12 pb-20 px-6 md:px-12">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-3xl md:text-5xl font-extrabold mb-6 leading-tight">
+                    Solve Hard Maths Problems <br class="hidden md:block"> with AI Coaching.
+                </h1>
+                
+                <!-- Video Container -->
+                <div class="max-w-3xl mx-auto mb-10 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20 bg-black relative">
+                    <div class="video-container" id="videoWrapper">
+                        <!-- Path wrapped in quotes, essential for filenames with spaces -->
+                        <video 
+                            id="vslVideo"
+                            autoplay 
+                            muted 
+                            loop 
+                            playsinline 
+                            controls
+                            preload="auto"
+                        >
+                            <source src="WhatsApp Video 2026-04-25 at 8.59.52 AM.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        
+                        <!-- Manual Play Overlay (Hidden by default) -->
+                        <div id="playOverlay" class="play-overlay hidden">
+                            <div class="bg-white/20 p-6 rounded-full backdrop-blur-md border border-white/30">
+                                <i class="fas fa-play text-white text-4xl ml-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Interaction Hint -->
+                    <div class="bg-black/40 py-2 text-[10px] md:text-xs font-medium text-white/70 flex justify-center items-center gap-2">
+                        <i class="fas fa-volume-up"></i>
+                        <span>Tap video to unmute and hear the full details!</span>
+                    </div>
+                </div>
+
+                <p class="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
+                    Snap a photo. Get a step-by-step breakdown. Master any concept in minutes. Join our community for free early access.
+                </p>
+
+                <div class="flex flex-col items-center gap-4">
+                    <a href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank" class="whatsapp-btn text-white px-10 py-4 rounded-xl font-bold text-lg shadow-xl flex items-center justify-center w-full max-w-md">
+                        <i class="fab fa-whatsapp mr-3 text-2xl"></i> Join the WhatsApp Group
+                    </a>
+                    <p class="text-sm opacity-70 font-medium">100% Free • Early Access • Student Community</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Social Proof Bar -->
+        <div class="bg-white py-8 border-b border-slate-200">
+            <div class="max-w-5xl mx-auto px-6 grid grid-cols-3 gap-4 text-center items-center">
+                <div class="flex flex-col items-center">
+                    <span class="text-indigo-600 font-bold text-xl">5+</span>
+                    <span class="text-slate-500 text-[10px] md:text-xs uppercase font-bold tracking-widest">Concepts Per Question</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-indigo-600 font-bold text-xl">Instant</span>
+                    <span class="text-slate-500 text-[10px] md:text-xs uppercase font-bold tracking-widest">Photo Solver</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-indigo-600 font-bold text-xl">Free</span>
+                    <span class="text-slate-500 text-[10px] md:text-xs uppercase font-bold tracking-widest">Group Access</span>
+                </div>
             </div>
         </div>
-    </header>
-
-    <!-- To the Point Features -->
-    <section class="py-16 px-6 md:px-12 max-w-6xl mx-auto">
-        <div class="grid md:grid-cols-3 gap-10">
-            <!-- Feature 1 -->
-            <div class="text-center p-6">
-                <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <i class="fas fa-upload text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Upload Questions</h3>
-                <p class="text-slate-600">Snap a photo of any tough math problem. Our AI reads handwriting and symbols perfectly.</p>
-            </div>
-
-            <!-- Feature 2 -->
-            <div class="text-center p-6">
-                <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <i class="fas fa-brain text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Master Concepts</h3>
-                <p class="text-slate-600">Don't just get the answer. We explain the "why" and "how" behind every single step.</p>
-            </div>
-
-            <!-- Feature 3 -->
-            <div class="text-center p-6">
-                <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <i class="fas fa-repeat text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Practice Buddy</h3>
-                <p class="text-slate-600">Get 3 similar "helping questions" after every solution to ensure you've truly mastered the topic.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Simple Community CTA -->
-    <section class="py-20 bg-slate-100 px-6 border-t border-b border-slate-200">
-        <div class="max-w-3xl mx-auto text-center">
-            <h2 class="text-3xl font-bold mb-6">Ready to improve your grades?</h2>
-            <p class="text-lg text-slate-600 mb-8">
-                Join our exclusive WhatsApp community for early access, math tips, and direct support from the AI Maths Buddy team.
-            </p>
-            <a href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank" class="whatsapp-btn text-white px-12 py-5 rounded-2xl text-xl font-bold shadow-lg inline-flex items-center">
-                <i class="fab fa-whatsapp mr-3 text-2xl"></i> Join the Group Now
-            </a>
-            <p class="mt-4 text-sm text-slate-400 font-medium">100% Free • No Spam • Student Focused</p>
-        </div>
-    </section>
+    </main>
 
     <!-- Compact Footer -->
-    <footer class="py-10 px-6 text-center text-slate-500 text-sm">
-        <div class="flex justify-center space-x-6 mb-4">
-            <a href="#" class="hover:underline">Contact</a>
-            <a href="#" class="hover:underline">Privacy</a>
-            <a href="#" class="hover:underline">Terms</a>
-        </div>
+    <footer class="py-8 px-6 text-center text-slate-400 text-xs">
         <p>&copy; 2024 AI Maths Buddy. All rights reserved.</p>
     </footer>
 
+    <script>
+        const video = document.getElementById('vslVideo');
+        const overlay = document.getElementById('playOverlay');
+
+        function playVideo() {
+            const playPromise = video.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    overlay.classList.add('hidden');
+                }).catch(error => {
+                    // Show play overlay if autoplay was blocked
+                    overlay.classList.remove('hidden');
+                    console.log("Autoplay prevented:", error);
+                });
+            }
+        }
+
+        // Initial attempt
+        window.addEventListener('DOMContentLoaded', playVideo);
+        window.addEventListener('load', playVideo);
+
+        // Allow manual trigger via overlay
+        overlay.addEventListener('click', () => {
+            video.muted = false; // Unmute on click to improve experience
+            playVideo();
+        });
+
+        // Some browsers need a slight delay
+        setTimeout(playVideo, 1000);
+    </script>
 </body>
 </html>
