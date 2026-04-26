@@ -1,207 +1,222 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Maths Buddy — Learn Smarter, Not Harder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue-deep: #0a1628; --blue-dark: #0d1f3c; --blue-mid: #1a3a6e;
+      --blue-bright: #2563eb; --blue-electric: #3b82f6; --blue-light: #60a5fa;
+      --blue-glow: #93c5fd; --blue-pale: #dbeafe; --white: #ffffff;
+      --off-white: #f0f6ff; --text-muted: #94a3b8; --wa-green: #25d366;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--blue-deep); color: var(--white); overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; opacity: 0.4; }
+    
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 18px 60px; backdrop-filter: blur(20px); background: rgba(10,22,40,0.7); border-bottom: 1px solid rgba(59,130,246,0.15); }
+    .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.02em; color: var(--white); display: flex; align-items: center; gap: 10px; }
+    .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--blue-bright), var(--blue-light)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1rem; box-shadow: 0 0 20px rgba(37,99,235,0.5); }
+    .nav-cta { background: var(--wa-green); color: white; padding: 10px 24px; border-radius: 50px; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.1); }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(37,211,102,0.3); }
+    
+    .hero { position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 120px 40px 80px; text-align: center; overflow: hidden; }
+    .hero::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 900px; height: 600px; background: radial-gradient(ellipse at center, rgba(37,99,235,0.25) 0%, transparent 70%); pointer-events: none; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; animation: float 8s ease-in-out infinite; }
+    .orb-1 { width: 400px; height: 400px; background: rgba(37,99,235,0.18); top: -100px; left: -100px; }
+    
+    .grid-lines { position: absolute; inset: 0; background-image: linear-gradient(rgba(59,130,246,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,0.05) 1px,transparent 1px); background-size: 60px 60px; pointer-events: none; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(37,99,235,0.15); border: 1px solid rgba(37,99,235,0.35); border-radius: 50px; padding: 8px 20px; font-size: 0.82rem; font-weight: 500; color: var(--blue-light); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 32px; position: relative; z-index: 1; }
+    
+    .hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; position: relative; z-index: 1; }
+    .gradient-text { background: linear-gradient(135deg,var(--blue-light) 0%,var(--white) 40%,var(--blue-glow) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .accent { background: linear-gradient(135deg,#3b82f6,#60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-sub { font-size: clamp(1rem, 2.5vw, 1.3rem); color: var(--text-muted); max-width: 560px; line-height: 1.7; margin: 24px auto 0; font-weight: 300; position: relative; z-index: 1; }
+    
+    .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 44px; position: relative; z-index: 1; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 10px; background: var(--wa-green); color: white; padding: 16px 36px; border-radius: 50px; font-size: 1rem; font-weight: 700; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(37,211,102,0.3); border: 1px solid rgba(255,255,255,0.15); cursor: pointer; }
+    .btn-primary:hover { transform: scale(1.05); background: #22c35e; }
+    .btn-secondary { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); color: white; padding: 16px 36px; border-radius: 50px; font-size: 1rem; font-weight: 600; text-decoration: none; transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.1); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+    
+    .video-section { padding: 100px 40px; max-width: 960px; margin: 0 auto; text-align: center; }
+    .section-title { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 50px; }
+    
+    .video-thumbnail-link {
+      display: block;
+      position: relative; 
+      border-radius: 24px; 
+      overflow: hidden; 
+      border: 1px solid rgba(59,130,246,0.3); 
+      box-shadow: 0 0 80px rgba(37,99,235,0.15), 0 40px 80px rgba(0,0,0,0.5); 
+      background: #f8fafc;
+      width: 100%;
+      aspect-ratio: 16/9;
+      text-decoration: none;
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .video-thumbnail-link:hover {
+      transform: scale(1.01);
+      border-color: var(--blue-light);
+    }
 
-    <meta charset="UTF-8">
+    .thumbnail-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.95;
+      transition: all 0.3s ease;
+    }
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    .video-thumbnail-link:hover .thumbnail-img {
+      opacity: 0.8;
+      filter: blur(1px);
+    }
+    
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(13, 31, 60, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      transition: background 0.3s ease;
+    }
 
-    <title>AI Maths Buddy - Your Personal Math Tutor</title>
+    .video-thumbnail-link:hover .video-overlay {
+      background: rgba(13, 31, 60, 0.3);
+    }
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    .play-btn {
+      width: 80px;
+      height: 80px;
+      background: var(--blue-bright);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-left: 5px;
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      box-shadow: 0 0 30px rgba(37,99,235,0.5);
+      transition: all 0.3s ease;
+      color: white;
+    }
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    .video-thumbnail-link:hover .play-btn {
+      transform: scale(1.1);
+      background: var(--blue-electric);
+    }
+    
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap: 24px; padding: 100px 40px; max-width: 1100px; margin: 0 auto; }
+    .feature-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(59,130,246,0.1); border-radius: 20px; padding: 36px 32px; transition: all 0.3s ease; }
+    .feature-card:hover { background: rgba(255,255,255,0.05); border-color: rgba(59,130,246,0.3); transform: translateY(-5px); }
+    
+    .cta-section { padding: 80px 40px 120px; text-align: center; }
+    .cta-card { max-width: 800px; margin: 0 auto; background: linear-gradient(135deg,rgba(37,99,235,0.1),rgba(37,211,102,0.1)); border: 1px solid rgba(37,211,102,0.25); border-radius: 32px; padding: 80px 60px; position: relative; overflow: hidden; }
+    .cta-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(37,211,102,0.1) 0%, transparent 70%); pointer-events: none; }
+    
+    .wa-btn-big { display: inline-flex; align-items: center; gap: 12px; background: var(--wa-green); color: white; padding: 20px 50px; border-radius: 50px; font-size: 1.2rem; font-weight: 800; text-decoration: none; box-shadow: 0 15px 40px rgba(37,211,102,0.4); transition: all 0.3s ease; position: relative; z-index: 2; border: 2px solid rgba(255,255,255,0.2); }
+    .wa-btn-big:hover { transform: scale(1.05) translateY(-3px); background: #22c35e; }
+    
+    footer { border-top: 1px solid rgba(59,130,246,0.1); padding: 40px 60px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
 
-    <style>
-
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
-
-        body { font-family: 'Inter', sans-serif; }
-
-        .hero-gradient { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); }
-
-        .whatsapp-btn { background-color: #25D366; transition: all 0.2s ease; }
-
-        .whatsapp-btn:hover { background-color: #128C7E; transform: translateY(-2px); }
-
-    </style>
-
+    @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-20px);} }
+    
+    @media (max-width: 768px) {
+      nav { padding: 15px 25px; }
+      .cta-card { padding: 50px 30px; }
+      footer { justify-content: center; text-align: center; }
+    }
+  </style>
 </head>
-
-<body class="bg-slate-50 text-slate-900">
-
-
-
-    <!-- Simple Navbar -->
-
-    <nav class="py-6 px-6 md:px-12 flex justify-between items-center bg-white shadow-sm sticky top-0 z-50">
-
-        <div class="flex items-center space-x-2">
-
-            <i class="fas fa-calculator text-indigo-600 text-2xl"></i>
-
-            <span class="text-xl font-bold tracking-tight">AI Maths Buddy</span>
-
-        </div>
-
-        <a href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank" class="whatsapp-btn text-white px-5 py-2 rounded-lg font-semibold text-sm flex items-center shadow-md">
-
-            <i class="fab fa-whatsapp mr-2 text-lg"></i> Join Group
-
-        </a>
-
-    </nav>
-
-
-
-    <!-- Crisp Hero Section -->
-
-    <header class="hero-gradient text-white py-20 px-6 md:px-12 text-center">
-
-        <div class="max-w-4xl mx-auto">
-
-            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
-
-                Solve Hard Maths Problems <br class="hidden md:block"> with AI Coaching.
-
-            </h1>
-
-            <p class="text-xl opacity-90 mb-10 max-w-2xl mx-auto">
-
-                Upload a photo of any math question. Get instant explanations, understand core concepts, and practice with similar questions.
-
-            </p>
-
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-
-                <a href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank" class="whatsapp-btn text-white px-10 py-4 rounded-xl font-bold text-lg shadow-xl flex items-center justify-center">
-
-                    <i class="fab fa-whatsapp mr-3 text-2xl"></i> Get Started on WhatsApp
-
-                </a>
-
-            </div>
-
-        </div>
-
-    </header>
-
-
-
-    <!-- To the Point Features -->
-
-    <section class="py-16 px-6 md:px-12 max-w-6xl mx-auto">
-
-        <div class="grid md:grid-cols-3 gap-10">
-
-            <!-- Feature 1 -->
-
-            <div class="text-center p-6">
-
-                <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6">
-
-                    <i class="fas fa-upload text-2xl"></i>
-
-                </div>
-
-                <h3 class="text-xl font-bold mb-3">Upload Questions</h3>
-
-                <p class="text-slate-600">Snap a photo of any tough math problem. Our AI reads handwriting and symbols perfectly.</p>
-
-            </div>
-
-
-
-            <!-- Feature 2 -->
-
-            <div class="text-center p-6">
-
-                <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6">
-
-                    <i class="fas fa-brain text-2xl"></i>
-
-                </div>
-
-                <h3 class="text-xl font-bold mb-3">Master Concepts</h3>
-
-                <p class="text-slate-600">Don't just get the answer. We explain the "why" and "how" behind every single step.</p>
-
-            </div>
-
-
-
-            <!-- Feature 3 -->
-
-            <div class="text-center p-6">
-
-                <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6">
-
-                    <i class="fas fa-repeat text-2xl"></i>
-
-                </div>
-
-                <h3 class="text-xl font-bold mb-3">Practice Buddy</h3>
-
-                <p class="text-slate-600">Get 3 similar "helping questions" after every solution to ensure you've truly mastered the topic.</p>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- Simple Community CTA -->
-
-    <section class="py-20 bg-slate-100 px-6 border-t border-b border-slate-200">
-
-        <div class="max-w-3xl mx-auto text-center">
-
-            <h2 class="text-3xl font-bold mb-6">Ready to improve your grades?</h2>
-
-            <p class="text-lg text-slate-600 mb-8">
-
-                Join our exclusive WhatsApp community for early access, math tips, and direct support from the AI Maths Buddy team.
-
-            </p>
-
-            <a href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank" class="whatsapp-btn text-white px-12 py-5 rounded-2xl text-xl font-bold shadow-lg inline-flex items-center">
-
-                <i class="fab fa-whatsapp mr-3 text-2xl"></i> Join the Group Now
-
-            </a>
-
-            <p class="mt-4 text-sm text-slate-400 font-medium">100% Free • No Spam • Student Focused</p>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- Compact Footer -->
-
-    <footer class="py-10 px-6 text-center text-slate-500 text-sm">
-
-        <div class="flex justify-center space-x-6 mb-4">
-
-            <a href="#" class="hover:underline">Contact</a>
-
-            <a href="#" class="hover:underline">Privacy</a>
-
-            <a href="#" class="hover:underline">Terms</a>
-
-        </div>
-
-        <p>&copy; 2024 AI Maths Buddy. All rights reserved.</p>
-
-    </footer>
-
-
-
+<body>
+  <nav>
+    <div class="nav-logo"><div class="logo-icon">🧮</div>AI Maths Buddy</div>
+    <a class="nav-cta" href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank">Join WhatsApp</a>
+  </nav>
+
+  <section class="hero">
+    <div class="grid-lines"></div>
+    <div class="orb orb-1"></div>
+    <div class="hero-badge">Join 10,000+ Students</div>
+    <h1><span class="gradient-text">Master Maths</span><br/><span class="accent">With Your AI Buddy</span></h1>
+    <p class="hero-sub">Upload a photo of any maths problem. Our AI breaks it down into concepts and guides you step-by-step to a perfect score. Join our community to start!</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank">Join WhatsApp Group</a>
+      <a class="btn-secondary" href="#demo-video">Watch Product Tour</a>
+    </div>
+  </section>
+
+  <section class="video-section" id="demo-video">
+    <div style="font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue-light); font-weight: 600; margin-bottom: 16px;">Live Demo</div>
+    <h2 class="section-title">See the Magic in Action</h2>
+    
+    <a href="https://www.youtube.com/watch?v=wp2R1BSK6zo" target="_blank" class="video-thumbnail-link">
+      <div class="video-overlay">
+        <div class="play-btn">▶</div>
+        <h3 style="margin-bottom:8px; font-family:'Syne',sans-serif; color:var(--blue-deep); font-size:1.5rem; text-shadow: 0 2px 10px rgba(255,255,255,0.5);">Watch Product Demo</h3>
+        <p style="color:var(--blue-mid); font-weight:600; font-size:1rem">Click to view on YouTube</p>
+      </div>
+      <img src="https://lh3.googleusercontent.com/d/1TRC3F73p-ovzrs2TK7NxGzI959_CXNgn" alt="AI Maths Buddy Demo" class="thumbnail-img" onerror="this.src='https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=1000'">
+    </a>
+  </section>
+
+  <section class="features-grid">
+    <div class="feature-card">
+      <div style="font-size:2rem; margin-bottom:20px;">⚡</div>
+      <h3>Photo Recognition</h3>
+      <p>Simply snap a photo of any equation or word problem. Our AI understands handwritten notes instantly.</p>
+    </div>
+    <div class="feature-card">
+      <div style="font-size:2rem; margin-bottom:20px;">🧠</div>
+      <h3>Concept Breakdown</h3>
+      <p>We identify the core concepts behind every question, ensuring you learn the logic, not just the solution.</p>
+    </div>
+    <div class="feature-card">
+      <div style="font-size:2rem; margin-bottom:20px;">📈</div>
+      <h3>Community Support</h3>
+      <p>Get exclusive access to problem sets and expert tips within our thriving WhatsApp student community.</p>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="cta-card">
+      <div style="font-size:3rem; margin-bottom:20px;">🚀</div>
+      <h2>Ready to Ace Your Exams?</h2>
+      <p style="margin-bottom:40px; color:var(--text-muted); max-width: 500px; margin: 0 auto 30px;">Stop struggling with complex problems. Join the WhatsApp community today and start learning smarter.</p>
+      
+      <a class="wa-btn-big" href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank">Join WhatsApp Group Free</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="nav-logo">🧮 AI Maths Buddy</div>
+    <p style="color:var(--text-muted); font-size:0.9rem">© 2026 AI Maths Buddy. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = "1";
+          entry.target.style.transform = "translateY(0)";
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.feature-card, .cta-card').forEach(el => {
+      el.style.opacity = "0";
+      el.style.transform = "translateY(30px)";
+      el.style.transition = "all 0.8s ease-out";
+      observer.observe(el);
+    });
+  </script>
 </body>
-
 </html>
