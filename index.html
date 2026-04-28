@@ -1,222 +1,748 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI Maths Buddy — Learn Smarter, Not Harder</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --blue-deep: #0a1628; --blue-dark: #0d1f3c; --blue-mid: #1a3a6e;
-      --blue-bright: #2563eb; --blue-electric: #3b82f6; --blue-light: #60a5fa;
-      --blue-glow: #93c5fd; --blue-pale: #dbeafe; --white: #ffffff;
-      --off-white: #f0f6ff; --text-muted: #94a3b8; --wa-green: #25d366;
-    }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'DM Sans', sans-serif; background: var(--blue-deep); color: var(--white); overflow-x: hidden; }
-    body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; opacity: 0.4; }
-    
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 18px 60px; backdrop-filter: blur(20px); background: rgba(10,22,40,0.7); border-bottom: 1px solid rgba(59,130,246,0.15); }
-    .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.02em; color: var(--white); display: flex; align-items: center; gap: 10px; }
-    .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--blue-bright), var(--blue-light)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1rem; box-shadow: 0 0 20px rgba(37,99,235,0.5); }
-    .nav-cta { background: var(--wa-green); color: white; padding: 10px 24px; border-radius: 50px; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.1); }
-    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(37,211,102,0.3); }
-    
-    .hero { position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 120px 40px 80px; text-align: center; overflow: hidden; }
-    .hero::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 900px; height: 600px; background: radial-gradient(ellipse at center, rgba(37,99,235,0.25) 0%, transparent 70%); pointer-events: none; }
-    .orb { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; animation: float 8s ease-in-out infinite; }
-    .orb-1 { width: 400px; height: 400px; background: rgba(37,99,235,0.18); top: -100px; left: -100px; }
-    
-    .grid-lines { position: absolute; inset: 0; background-image: linear-gradient(rgba(59,130,246,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,0.05) 1px,transparent 1px); background-size: 60px 60px; pointer-events: none; }
-    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(37,99,235,0.15); border: 1px solid rgba(37,99,235,0.35); border-radius: 50px; padding: 8px 20px; font-size: 0.82rem; font-weight: 500; color: var(--blue-light); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 32px; position: relative; z-index: 1; }
-    
-    .hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 800; line-height: 1; letter-spacing: -0.04em; position: relative; z-index: 1; }
-    .gradient-text { background: linear-gradient(135deg,var(--blue-light) 0%,var(--white) 40%,var(--blue-glow) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .accent { background: linear-gradient(135deg,#3b82f6,#60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .hero-sub { font-size: clamp(1rem, 2.5vw, 1.3rem); color: var(--text-muted); max-width: 560px; line-height: 1.7; margin: 24px auto 0; font-weight: 300; position: relative; z-index: 1; }
-    
-    .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 44px; position: relative; z-index: 1; }
-    .btn-primary { display: inline-flex; align-items: center; gap: 10px; background: var(--wa-green); color: white; padding: 16px 36px; border-radius: 50px; font-size: 1rem; font-weight: 700; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(37,211,102,0.3); border: 1px solid rgba(255,255,255,0.15); cursor: pointer; }
-    .btn-primary:hover { transform: scale(1.05); background: #22c35e; }
-    .btn-secondary { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); color: white; padding: 16px 36px; border-radius: 50px; font-size: 1rem; font-weight: 600; text-decoration: none; transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.1); }
-    .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
-    
-    .video-section { padding: 100px 40px; max-width: 960px; margin: 0 auto; text-align: center; }
-    .section-title { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 50px; }
-    
-    .video-thumbnail-link {
-      display: block;
-      position: relative; 
-      border-radius: 24px; 
-      overflow: hidden; 
-      border: 1px solid rgba(59,130,246,0.3); 
-      box-shadow: 0 0 80px rgba(37,99,235,0.15), 0 40px 80px rgba(0,0,0,0.5); 
-      background: #f8fafc;
-      width: 100%;
-      aspect-ratio: 16/9;
-      text-decoration: none;
-      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    
-    .video-thumbnail-link:hover {
-      transform: scale(1.01);
-      border-color: var(--blue-light);
-    }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Math Tutor</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 
-    .thumbnail-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.95;
-      transition: all 0.3s ease;
-    }
+  <!-- ============================================================
+       CSS
+  ============================================================ -->
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    .video-thumbnail-link:hover .thumbnail-img {
-      opacity: 0.8;
-      filter: blur(1px);
-    }
-    
-    .video-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(13, 31, 60, 0.1);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 20;
-      transition: background 0.3s ease;
-    }
+    :root {
+      --bg:          #ffffff;
+      --bg-sec:      #f7f6f3;
+      --bg-info:     #e6f1fb;
+      --bg-success:  #eaf3de;
+      --bg-danger:   #fcebeb;
+      --text:        #1a1a18;
+      --text-sec:    #5f5e5a;
+      --text-ter:    #b4b2a9;
+      --text-info:   #185fa5;
+      --text-suc:    #3b6d11;
+      --text-danger: #a32d2d;
+      --border:      rgba(0,0,0,0.12);
+      --border-med:  rgba(0,0,0,0.22);
+      --border-info: #b5d4f4;
+      --border-danger:#f7c1c1;
+      --radius-md:   8px;
+      --radius-lg:   12px;
+    }
 
-    .video-thumbnail-link:hover .video-overlay {
-      background: rgba(13, 31, 60, 0.3);
-    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:          #1e1e1c;
+        --bg-sec:      #2a2a28;
+        --bg-info:     #0c447c22;
+        --bg-success:  #27500a22;
+        --bg-danger:   #791f1f22;
+        --text:        #f1efe8;
+        --text-sec:    #b4b2a9;
+        --text-ter:    #5f5e5a;
+        --text-info:   #85b7eb;
+        --text-suc:    #97c459;
+        --text-danger: #f09595;
+        --border:      rgba(255,255,255,0.1);
+        --border-med:  rgba(255,255,255,0.2);
+        --border-info: #185fa544;
+        --border-danger:#a32d2d44;
+      }
+    }
 
-    .play-btn {
-      width: 80px;
-      height: 80px;
-      background: var(--blue-bright);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding-left: 5px;
-      font-size: 1.8rem;
-      margin-bottom: 15px;
-      box-shadow: 0 0 30px rgba(37,99,235,0.5);
-      transition: all 0.3s ease;
-      color: white;
-    }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-sec);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 2rem 1rem 4rem;
+    }
 
-    .video-thumbnail-link:hover .play-btn {
-      transform: scale(1.1);
-      background: var(--blue-electric);
-    }
-    
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap: 24px; padding: 100px 40px; max-width: 1100px; margin: 0 auto; }
-    .feature-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(59,130,246,0.1); border-radius: 20px; padding: 36px 32px; transition: all 0.3s ease; }
-    .feature-card:hover { background: rgba(255,255,255,0.05); border-color: rgba(59,130,246,0.3); transform: translateY(-5px); }
-    
-    .cta-section { padding: 80px 40px 120px; text-align: center; }
-    .cta-card { max-width: 800px; margin: 0 auto; background: linear-gradient(135deg,rgba(37,99,235,0.1),rgba(37,211,102,0.1)); border: 1px solid rgba(37,211,102,0.25); border-radius: 32px; padding: 80px 60px; position: relative; overflow: hidden; }
-    .cta-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(37,211,102,0.1) 0%, transparent 70%); pointer-events: none; }
-    
-    .wa-btn-big { display: inline-flex; align-items: center; gap: 12px; background: var(--wa-green); color: white; padding: 20px 50px; border-radius: 50px; font-size: 1.2rem; font-weight: 800; text-decoration: none; box-shadow: 0 15px 40px rgba(37,211,102,0.4); transition: all 0.3s ease; position: relative; z-index: 2; border: 2px solid rgba(255,255,255,0.2); }
-    .wa-btn-big:hover { transform: scale(1.05) translateY(-3px); background: #22c35e; }
-    
-    footer { border-top: 1px solid rgba(59,130,246,0.1); padding: 40px 60px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+    #app {
+      width: 100%;
+      max-width: 680px;
+    }
 
-    @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-20px);} }
-    
-    @media (max-width: 768px) {
-      nav { padding: 15px 25px; }
-      .cta-card { padding: 50px 30px; }
-      footer { justify-content: center; text-align: center; }
-    }
-  </style>
+    /* ── Header ── */
+    .header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      padding: 0 0 1.25rem;
+      border-bottom: 0.5px solid var(--border);
+      margin-bottom: 1.75rem;
+    }
+
+    .header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 30px;
+      font-weight: 400;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+
+    .header p {
+      font-size: 13px;
+      color: var(--text-sec);
+      font-weight: 300;
+    }
+
+    /* ── Upload zone ── */
+    .upload-zone {
+      border: 1.5px dashed var(--border-med);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      background: var(--bg);
+      position: relative;
+    }
+
+    .upload-zone:hover,
+    .upload-zone.drag-over {
+      background: var(--bg-info);
+      border-color: var(--border-info);
+    }
+
+    .upload-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .upload-icon {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 14px;
+      background: var(--bg-sec);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .upload-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--text-sec);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .upload-label {
+      font-size: 14px;
+      color: var(--text-sec);
+      line-height: 1.7;
+    }
+
+    .upload-label strong { color: var(--text); font-weight: 500; }
+
+    /* ── Image preview ── */
+    .preview-wrap {
+      display: none;
+      margin-top: 1rem;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 0.5px solid var(--border);
+      position: relative;
+    }
+
+    .preview-wrap img {
+      width: 100%;
+      max-height: 280px;
+      object-fit: contain;
+      display: block;
+      background: var(--bg);
+      padding: 10px;
+    }
+
+    .clear-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: var(--bg);
+      border: 0.5px solid var(--border-med);
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 15px;
+      color: var(--text-sec);
+      line-height: 1;
+      transition: color 0.12s, border-color 0.12s;
+    }
+
+    .clear-btn:hover {
+      color: var(--text-danger);
+      border-color: var(--border-danger);
+    }
+
+    /* ── Divider ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 1.25rem 0;
+      color: var(--text-ter);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 0.5px;
+      background: var(--border);
+    }
+
+    /* ── Text input ── */
+    .alt-input label {
+      font-size: 12px;
+      color: var(--text-sec);
+      display: block;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .alt-input textarea {
+      width: 100%;
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 11px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      resize: vertical;
+      min-height: 80px;
+      background: var(--bg);
+      color: var(--text);
+      transition: border-color 0.12s;
+      outline: none;
+    }
+
+    .alt-input textarea:focus { border-color: var(--border-info); }
+
+    .alt-input textarea::placeholder { color: var(--text-ter); }
+
+    /* ── Error ── */
+    .error-msg {
+      background: var(--bg-danger);
+      color: var(--text-danger);
+      border: 0.5px solid var(--border-danger);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      font-size: 13px;
+      margin-top: 1rem;
+      display: none;
+    }
+
+    /* ── Solve button ── */
+    .solve-btn {
+      width: 100%;
+      margin-top: 1.25rem;
+      padding: 12px;
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      letter-spacing: 0.01em;
+    }
+
+    .solve-btn:hover { opacity: 0.82; }
+    .solve-btn:disabled { opacity: 0.38; cursor: not-allowed; }
+
+    /* ── Results ── */
+    .result-section {
+      margin-top: 1.75rem;
+      display: none;
+    }
+
+    .result-section.visible { display: block; }
+
+    .result-block {
+      background: var(--bg);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .result-block-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1rem;
+      padding-bottom: 10px;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .tag-solution { background: var(--bg-success); color: var(--text-suc); }
+    .tag-practice { background: var(--bg-info);    color: var(--text-info); }
+
+    .result-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-sec);
+    }
+
+    .solution-content {
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--text);
+      white-space: pre-wrap;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* ── Practice questions ── */
+    .practice-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .practice-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 12px 14px;
+      background: var(--bg-sec);
+      border-radius: var(--radius-md);
+      border: 0.5px solid var(--border);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      text-decoration: none;
+    }
+
+    .practice-item:hover {
+      border-color: var(--border-info);
+      background: var(--bg-info);
+    }
+
+    .q-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-ter);
+      min-width: 20px;
+      padding-top: 2px;
+    }
+
+    .q-text {
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--text);
+      flex: 1;
+    }
+
+    .q-arrow {
+      font-size: 16px;
+      color: var(--text-ter);
+      padding-top: 0px;
+    }
+
+    /* ── Loading ── */
+    .loading-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 1.5rem 0 0.5rem;
+      color: var(--text-sec);
+      font-size: 13px;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid var(--border-med);
+      border-top-color: var(--text);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Reset button ── */
+    .new-btn {
+      width: 100%;
+      padding: 10px;
+      background: transparent;
+      color: var(--text-sec);
+      border: 0.5px solid var(--border-med);
+      border-radius: var(--radius-md);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 0.25rem;
+      transition: background 0.12s, color 0.12s;
+    }
+
+    .new-btn:hover {
+      background: var(--bg-sec);
+      color: var(--text);
+    }
+  </style>
 </head>
+
 <body>
-  <nav>
-    <div class="nav-logo"><div class="logo-icon">🧮</div>AI Maths Buddy</div>
-    <a class="nav-cta" href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank">Join WhatsApp</a>
-  </nav>
+  <div id="app">
 
-  <section class="hero">
-    <div class="grid-lines"></div>
-    <div class="orb orb-1"></div>
-    <div class="hero-badge">Join 10,000+ Students</div>
-    <h1><span class="gradient-text">Master Maths</span><br/><span class="accent">With Your AI Buddy</span></h1>
-    <p class="hero-sub">Upload a photo of any maths problem. Our AI breaks it down into concepts and guides you step-by-step to a perfect score. Join our community to start!</p>
-    <div class="hero-actions">
-      <a class="btn-primary" href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank">Join WhatsApp Group</a>
-      <a class="btn-secondary" href="#demo-video">Watch Product Tour</a>
-    </div>
-  </section>
+    <!-- Header -->
+    <div class="header">
+      <h1>Math Tutor</h1>
+      <p>Upload a question — get a solution + practice</p>
+    </div>
 
-  <section class="video-section" id="demo-video">
-    <div style="font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue-light); font-weight: 600; margin-bottom: 16px;">Live Demo</div>
-    <h2 class="section-title">See the Magic in Action</h2>
-    
-    <a href="https://www.youtube.com/watch?v=wp2R1BSK6zo" target="_blank" class="video-thumbnail-link">
-      <div class="video-overlay">
-        <div class="play-btn">▶</div>
-        <h3 style="margin-bottom:8px; font-family:'Syne',sans-serif; color:var(--blue-deep); font-size:1.5rem; text-shadow: 0 2px 10px rgba(255,255,255,0.5);">Watch Product Demo</h3>
-        <p style="color:var(--blue-mid); font-weight:600; font-size:1rem">Click to view on YouTube</p>
-      </div>
-      <img src="https://lh3.googleusercontent.com/d/1TRC3F73p-ovzrs2TK7NxGzI959_CXNgn" alt="AI Maths Buddy Demo" class="thumbnail-img" onerror="this.src='https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=1000'">
-    </a>
-  </section>
+    <!-- Input section -->
+    <div id="input-section">
 
-  <section class="features-grid">
-    <div class="feature-card">
-      <div style="font-size:2rem; margin-bottom:20px;">⚡</div>
-      <h3>Photo Recognition</h3>
-      <p>Simply snap a photo of any equation or word problem. Our AI understands handwritten notes instantly.</p>
-    </div>
-    <div class="feature-card">
-      <div style="font-size:2rem; margin-bottom:20px;">🧠</div>
-      <h3>Concept Breakdown</h3>
-      <p>We identify the core concepts behind every question, ensuring you learn the logic, not just the solution.</p>
-    </div>
-    <div class="feature-card">
-      <div style="font-size:2rem; margin-bottom:20px;">📈</div>
-      <h3>Community Support</h3>
-      <p>Get exclusive access to problem sets and expert tips within our thriving WhatsApp student community.</p>
-    </div>
-  </section>
+      <!-- Upload zone -->
+      <div class="upload-zone" id="dropzone">
+        <input type="file" id="file-input" accept="image/*" />
+        <div class="upload-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+          </svg>
+        </div>
+        <p class="upload-label">
+          <strong>Click to upload</strong> or drag &amp; drop<br>
+          a photo of your math question (JPG, PNG, etc.)
+        </p>
+      </div>
 
-  <section class="cta-section">
-    <div class="cta-card">
-      <div style="font-size:3rem; margin-bottom:20px;">🚀</div>
-      <h2>Ready to Ace Your Exams?</h2>
-      <p style="margin-bottom:40px; color:var(--text-muted); max-width: 500px; margin: 0 auto 30px;">Stop struggling with complex problems. Join the WhatsApp community today and start learning smarter.</p>
-      
-      <a class="wa-btn-big" href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank">Join WhatsApp Group Free</a>
-    </div>
-  </section>
+      <!-- Image preview -->
+      <div class="preview-wrap" id="preview-wrap">
+        <img id="preview-img" src="" alt="Uploaded math question" />
+        <button class="clear-btn" id="clear-btn" title="Remove image">✕</button>
+      </div>
 
-  <footer>
-    <div class="nav-logo">🧮 AI Maths Buddy</div>
-    <p style="color:var(--text-muted); font-size:0.9rem">© 2026 AI Maths Buddy. All rights reserved.</p>
-  </footer>
+      <div class="divider">or type it below</div>
 
-  <script>
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = "1";
-          entry.target.style.transform = "translateY(0)";
-        }
-      });
-    }, { threshold: 0.1 });
+      <!-- Text input -->
+      <div class="alt-input">
+        <label for="text-input">Type your question</label>
+        <textarea
+          id="text-input"
+          placeholder="e.g. Solve: 2x² – 5x + 3 = 0 using the quadratic formula"
+        ></textarea>
+      </div>
 
-    document.querySelectorAll('.feature-card, .cta-card').forEach(el => {
-      el.style.opacity = "0";
-      el.style.transform = "translateY(30px)";
-      el.style.transition = "all 0.8s ease-out";
-      observer.observe(el);
-    });
-  </script>
+      <!-- Error -->
+      <div class="error-msg" id="error-msg"></div>
+
+      <!-- Submit -->
+      <button class="solve-btn" id="solve-btn">
+        Solve &amp; generate practice questions ↗
+      </button>
+
+      <!-- Loading indicator (hidden by default) -->
+      <div class="loading-row" id="loading-row" style="display:none;">
+        <div class="spinner"></div>
+        <span id="loading-text">Analyzing your question…</span>
+      </div>
+
+    </div><!-- /input-section -->
+
+    <!-- Result section -->
+    <div class="result-section" id="result-section">
+
+      <!-- Solution block -->
+      <div class="result-block">
+        <div class="result-block-header">
+          <span class="tag tag-solution">Solution</span>
+          <span class="result-title" id="topic-label">Step-by-step walkthrough</span>
+        </div>
+        <div class="solution-content" id="solution-text"></div>
+      </div>
+
+      <!-- Practice block -->
+      <div class="result-block">
+        <div class="result-block-header">
+          <span class="tag tag-practice">Practice</span>
+          <span class="result-title">Questions to strengthen the concept</span>
+        </div>
+        <ul class="practice-list" id="practice-list"></ul>
+      </div>
+
+      <button class="new-btn" id="new-btn">← Solve another question</button>
+
+    </div><!-- /result-section -->
+
+  </div><!-- /app -->
+
+  <!-- ============================================================
+       JAVASCRIPT
+  ============================================================ -->
+  <script>
+    // ── State ────────────────────────────────────────────────────
+    let imageBase64 = null;
+    let imageType   = null;
+
+    // ── DOM refs ─────────────────────────────────────────────────
+    const fileInput     = document.getElementById('file-input');
+    const dropzone      = document.getElementById('dropzone');
+    const previewWrap   = document.getElementById('preview-wrap');
+    const previewImg    = document.getElementById('preview-img');
+    const clearBtn      = document.getElementById('clear-btn');
+    const textInput     = document.getElementById('text-input');
+    const solveBtn      = document.getElementById('solve-btn');
+    const errorMsg      = document.getElementById('error-msg');
+    const loadingRow    = document.getElementById('loading-row');
+    const loadingText   = document.getElementById('loading-text');
+    const inputSection  = document.getElementById('input-section');
+    const resultSection = document.getElementById('result-section');
+    const topicLabel    = document.getElementById('topic-label');
+    const solutionText  = document.getElementById('solution-text');
+    const practiceList  = document.getElementById('practice-list');
+    const newBtn        = document.getElementById('new-btn');
+
+    // ── Image handling ────────────────────────────────────────────
+    fileInput.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (file) loadImage(file);
+    });
+
+    dropzone.addEventListener('dragover', e => {
+      e.preventDefault();
+      dropzone.classList.add('drag-over');
+    });
+
+    dropzone.addEventListener('dragleave', () => {
+      dropzone.classList.remove('drag-over');
+    });
+
+    dropzone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropzone.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) loadImage(file);
+    });
+
+    clearBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      clearImage();
+    });
+
+    function loadImage(file) {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const result   = ev.target.result;
+        imageBase64    = result.split(',')[1];
+        imageType      = file.type;
+        previewImg.src = result;
+        previewWrap.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearImage() {
+      imageBase64 = null;
+      imageType   = null;
+      previewImg.src = '';
+      previewWrap.style.display = 'none';
+      fileInput.value = '';
+    }
+
+    // ── UI helpers ────────────────────────────────────────────────
+    function showError(msg) {
+      errorMsg.textContent    = msg;
+      errorMsg.style.display  = 'block';
+    }
+
+    function hideError() {
+      errorMsg.style.display = 'none';
+    }
+
+    function setLoading(active, msg) {
+      solveBtn.disabled          = active;
+      solveBtn.textContent       = active ? 'Analyzing…' : 'Solve & generate practice questions ↗';
+      loadingRow.style.display   = active ? 'flex' : 'none';
+      if (msg) loadingText.textContent = msg;
+    }
+
+    // ── Main solve function ───────────────────────────────────────
+    solveBtn.addEventListener('click', solve);
+
+    async function solve() {
+      hideError();
+
+      const typedQ = textInput.value.trim();
+
+      if (!imageBase64 && !typedQ) {
+        showError('Please upload an image or type your question first.');
+        return;
+      }
+
+      setLoading(true, 'Analyzing your question…');
+
+      // Build message content
+      const userContent = [];
+
+      if (imageBase64) {
+        userContent.push({
+          type: 'image',
+          source: {
+            type:       'base64',
+            media_type: imageType,
+            data:       imageBase64
+          }
+        });
+      }
+
+      const prompt = buildPrompt(typedQ, !!imageBase64);
+      userContent.push({ type: 'text', text: prompt });
+
+      try {
+        setLoading(true, 'Solving the problem…');
+
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model:      'claude-sonnet-4-20250514',
+            max_tokens: 1000,
+            messages: [{ role: 'user', content: userContent }]
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+
+        const data  = await response.json();
+        const raw   = (data.content || []).map(b => b.text || '').join('').trim();
+        const clean = raw.replace(/```json|```/g, '').trim();
+        const parsed = JSON.parse(clean);
+
+        renderResults(parsed);
+
+      } catch (err) {
+        console.error(err);
+        showError('Something went wrong. Please check your question and try again.');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // ── Prompt builder ────────────────────────────────────────────
+    function buildPrompt(typedQ, hasImage) {
+      const questionPart = typedQ
+        ? `Here is the math question${hasImage ? ' (also visible in the image above)' : ''}: "${typedQ}"`
+        : 'The math question is shown in the image above.';
+
+      return `${questionPart}
+
+Please:
+1. Identify the mathematical topic / concept being tested.
+2. Provide a clear, numbered, step-by-step solution.
+3. Generate exactly 5 practice questions that build the same concept, ordered from easier to harder.
+
+Respond ONLY with valid JSON — no markdown fences, no preamble, no trailing text.
+
+{
+  "topic": "Short topic name, e.g. Quadratic Equations",
+  "solution": "Full step-by-step solution as plain text",
+  "practice": [
+    "Question 1 (easiest)",
+    "Question 2",
+    "Question 3",
+    "Question 4",
+    "Question 5 (hardest)"
+  ]
+}`;
+    }
+
+    // ── Render results ────────────────────────────────────────────
+    function renderResults(data) {
+      // Topic label
+      topicLabel.textContent = data.topic || 'Step-by-step walkthrough';
+
+      // Solution
+      solutionText.textContent = data.solution || 'No solution returned.';
+
+      // Practice questions
+      practiceList.innerHTML = '';
+      const questions = Array.isArray(data.practice) ? data.practice : [];
+
+      questions.forEach((q, i) => {
+        const li = document.createElement('li');
+        li.className = 'practice-item';
+        li.innerHTML = `
+          <span class="q-num">Q${i + 1}</span>
+          <span class="q-text">${escapeHtml(q)}</span>
+          <span class="q-arrow">›</span>
+        `;
+        // Clicking a practice question opens a new tab / window with the question pre-filled
+        li.addEventListener('click', () => openPracticeQuestion(q));
+        practiceList.appendChild(li);
+      });
+
+      // Show results, hide input
+      inputSection.style.display = 'none';
+      resultSection.classList.add('visible');
+    }
+
+    // ── Practice question click ───────────────────────────────────
+    function openPracticeQuestion(question) {
+      // Pre-fill the text area for the next solve, then scroll to top
+      reset(false);
+      textInput.value = question;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ── Reset ─────────────────────────────────────────────────────
+    newBtn.addEventListener('click', () => reset(true));
+
+    function reset(clearText) {
+      clearImage();
+      if (clearText) textInput.value = '';
+      solutionText.textContent = '';
+      practiceList.innerHTML   = '';
+      hideError();
+      inputSection.style.display = 'block';
+      resultSection.classList.remove('visible');
+    }
+
+    // ── Utility ───────────────────────────────────────────────────
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+  </script>
 </body>
 </html>
