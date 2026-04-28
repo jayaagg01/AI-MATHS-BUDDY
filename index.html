@@ -1,748 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Math Tutor</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-
-  <!-- ============================================================
-       CSS
-  ============================================================ -->
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg:          #ffffff;
-      --bg-sec:      #f7f6f3;
-      --bg-info:     #e6f1fb;
-      --bg-success:  #eaf3de;
-      --bg-danger:   #fcebeb;
-      --text:        #1a1a18;
-      --text-sec:    #5f5e5a;
-      --text-ter:    #b4b2a9;
-      --text-info:   #185fa5;
-      --text-suc:    #3b6d11;
-      --text-danger: #a32d2d;
-      --border:      rgba(0,0,0,0.12);
-      --border-med:  rgba(0,0,0,0.22);
-      --border-info: #b5d4f4;
-      --border-danger:#f7c1c1;
-      --radius-md:   8px;
-      --radius-lg:   12px;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg:          #1e1e1c;
-        --bg-sec:      #2a2a28;
-        --bg-info:     #0c447c22;
-        --bg-success:  #27500a22;
-        --bg-danger:   #791f1f22;
-        --text:        #f1efe8;
-        --text-sec:    #b4b2a9;
-        --text-ter:    #5f5e5a;
-        --text-info:   #85b7eb;
-        --text-suc:    #97c459;
-        --text-danger: #f09595;
-        --border:      rgba(255,255,255,0.1);
-        --border-med:  rgba(255,255,255,0.2);
-        --border-info: #185fa544;
-        --border-danger:#a32d2d44;
-      }
-    }
-
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg-sec);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      padding: 2rem 1rem 4rem;
-    }
-
-    #app {
-      width: 100%;
-      max-width: 680px;
-    }
-
-    /* ── Header ── */
-    .header {
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-      padding: 0 0 1.25rem;
-      border-bottom: 0.5px solid var(--border);
-      margin-bottom: 1.75rem;
-    }
-
-    .header h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 30px;
-      font-weight: 400;
-      letter-spacing: -0.5px;
-      color: var(--text);
-    }
-
-    .header p {
-      font-size: 13px;
-      color: var(--text-sec);
-      font-weight: 300;
-    }
-
-    /* ── Upload zone ── */
-    .upload-zone {
-      border: 1.5px dashed var(--border-med);
-      border-radius: var(--radius-lg);
-      padding: 2.5rem 1.5rem;
-      text-align: center;
-      cursor: pointer;
-      transition: background 0.15s, border-color 0.15s;
-      background: var(--bg);
-      position: relative;
-    }
-
-    .upload-zone:hover,
-    .upload-zone.drag-over {
-      background: var(--bg-info);
-      border-color: var(--border-info);
-    }
-
-    .upload-zone input[type="file"] {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      cursor: pointer;
-      width: 100%;
-      height: 100%;
-    }
-
-    .upload-icon {
-      width: 44px;
-      height: 44px;
-      margin: 0 auto 14px;
-      background: var(--bg-sec);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .upload-icon svg {
-      width: 22px;
-      height: 22px;
-      stroke: var(--text-sec);
-      fill: none;
-      stroke-width: 1.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .upload-label {
-      font-size: 14px;
-      color: var(--text-sec);
-      line-height: 1.7;
-    }
-
-    .upload-label strong { color: var(--text); font-weight: 500; }
-
-    /* ── Image preview ── */
-    .preview-wrap {
-      display: none;
-      margin-top: 1rem;
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      border: 0.5px solid var(--border);
-      position: relative;
-    }
-
-    .preview-wrap img {
-      width: 100%;
-      max-height: 280px;
-      object-fit: contain;
-      display: block;
-      background: var(--bg);
-      padding: 10px;
-    }
-
-    .clear-btn {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background: var(--bg);
-      border: 0.5px solid var(--border-med);
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 15px;
-      color: var(--text-sec);
-      line-height: 1;
-      transition: color 0.12s, border-color 0.12s;
-    }
-
-    .clear-btn:hover {
-      color: var(--text-danger);
-      border-color: var(--border-danger);
-    }
-
-    /* ── Divider ── */
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 1.25rem 0;
-      color: var(--text-ter);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      height: 0.5px;
-      background: var(--border);
-    }
-
-    /* ── Text input ── */
-    .alt-input label {
-      font-size: 12px;
-      color: var(--text-sec);
-      display: block;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .alt-input textarea {
-      width: 100%;
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 11px 14px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      resize: vertical;
-      min-height: 80px;
-      background: var(--bg);
-      color: var(--text);
-      transition: border-color 0.12s;
-      outline: none;
-    }
-
-    .alt-input textarea:focus { border-color: var(--border-info); }
-
-    .alt-input textarea::placeholder { color: var(--text-ter); }
-
-    /* ── Error ── */
-    .error-msg {
-      background: var(--bg-danger);
-      color: var(--text-danger);
-      border: 0.5px solid var(--border-danger);
-      border-radius: var(--radius-md);
-      padding: 10px 14px;
-      font-size: 13px;
-      margin-top: 1rem;
-      display: none;
-    }
-
-    /* ── Solve button ── */
-    .solve-btn {
-      width: 100%;
-      margin-top: 1.25rem;
-      padding: 12px;
-      background: var(--text);
-      color: var(--bg);
-      border: none;
-      border-radius: var(--radius-md);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: opacity 0.15s;
-      letter-spacing: 0.01em;
-    }
-
-    .solve-btn:hover { opacity: 0.82; }
-    .solve-btn:disabled { opacity: 0.38; cursor: not-allowed; }
-
-    /* ── Results ── */
-    .result-section {
-      margin-top: 1.75rem;
-      display: none;
-    }
-
-    .result-section.visible { display: block; }
-
-    .result-block {
-      background: var(--bg);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 1.25rem;
-      margin-bottom: 1rem;
-    }
-
-    .result-block-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 1rem;
-      padding-bottom: 10px;
-      border-bottom: 0.5px solid var(--border);
-    }
-
-    .tag {
-      font-size: 11px;
-      font-weight: 500;
-      padding: 3px 10px;
-      border-radius: 20px;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .tag-solution { background: var(--bg-success); color: var(--text-suc); }
-    .tag-practice { background: var(--bg-info);    color: var(--text-info); }
-
-    .result-title {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-sec);
-    }
-
-    .solution-content {
-      font-size: 14px;
-      line-height: 1.85;
-      color: var(--text);
-      white-space: pre-wrap;
-      font-family: 'DM Sans', sans-serif;
-    }
-
-    /* ── Practice questions ── */
-    .practice-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .practice-item {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      padding: 12px 14px;
-      background: var(--bg-sec);
-      border-radius: var(--radius-md);
-      border: 0.5px solid var(--border);
-      cursor: pointer;
-      transition: border-color 0.15s, background 0.15s;
-      text-decoration: none;
-    }
-
-    .practice-item:hover {
-      border-color: var(--border-info);
-      background: var(--bg-info);
-    }
-
-    .q-num {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--text-ter);
-      min-width: 20px;
-      padding-top: 2px;
-    }
-
-    .q-text {
-      font-size: 13px;
-      line-height: 1.65;
-      color: var(--text);
-      flex: 1;
-    }
-
-    .q-arrow {
-      font-size: 16px;
-      color: var(--text-ter);
-      padding-top: 0px;
-    }
-
-    /* ── Loading ── */
-    .loading-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 1.5rem 0 0.5rem;
-      color: var(--text-sec);
-      font-size: 13px;
-    }
-
-    .spinner {
-      width: 16px;
-      height: 16px;
-      border: 1.5px solid var(--border-med);
-      border-top-color: var(--text);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      flex-shrink: 0;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── Reset button ── */
-    .new-btn {
-      width: 100%;
-      padding: 10px;
-      background: transparent;
-      color: var(--text-sec);
-      border: 0.5px solid var(--border-med);
-      border-radius: var(--radius-md);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      cursor: pointer;
-      margin-top: 0.25rem;
-      transition: background 0.12s, color 0.12s;
-    }
-
-    .new-btn:hover {
-      background: var(--bg-sec);
-      color: var(--text);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Maths Buddy - Your Personal Math Tutor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .hero-gradient { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); }
+        .whatsapp-btn { background-color: #25D366; transition: all 0.2s ease; }
+        .whatsapp-btn:hover { background-color: #128C7E; transform: translateY(-2px); }
+    </style>
 </head>
+<body class="bg-slate-50 text-slate-900">
 
-<body>
-  <div id="app">
+    <!-- Simple Navbar -->
+    <nav class="py-6 px-6 md:px-12 flex justify-between items-center bg-white shadow-sm sticky top-0 z-50">
+        <div class="flex items-center space-x-2">
+            <i class="fas fa-calculator text-indigo-600 text-2xl"></i>
+            <span class="text-xl font-bold tracking-tight">AI Maths Buddy</span>
+        </div>
+        <a href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank" class="whatsapp-btn text-white px-5 py-2 rounded-lg font-semibold text-sm flex items-center shadow-md">
+            <i class="fab fa-whatsapp mr-2 text-lg"></i> Join Group
+        </a>
+    </nav>
 
-    <!-- Header -->
-    <div class="header">
-      <h1>Math Tutor</h1>
-      <p>Upload a question — get a solution + practice</p>
-    </div>
+    <!-- Crisp Hero Section -->
+    <header class="hero-gradient text-white py-20 px-6 md:px-12 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
+                Solve Hard Maths Problems <br class="hidden md:block"> with AI Coaching.
+            </h1>
+            <p class="text-xl opacity-90 mb-10 max-w-2xl mx-auto">
+                Upload a photo of any math question. Get instant explanations, understand core concepts, and practice with similar questions.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank" class="whatsapp-btn text-white px-10 py-4 rounded-xl font-bold text-lg shadow-xl flex items-center justify-center">
+                    <i class="fab fa-whatsapp mr-3 text-2xl"></i> Get Started on WhatsApp
+                </a>
+            </div>
+        </div>
+    </header>
 
-    <!-- Input section -->
-    <div id="input-section">
+    <!-- To the Point Features -->
+    <section class="py-16 px-6 md:px-12 max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-3 gap-10">
+            <!-- Feature 1 -->
+            <div class="text-center p-6">
+                <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-upload text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Upload Questions</h3>
+                <p class="text-slate-600">Snap a photo of any tough math problem. Our AI reads handwriting and symbols perfectly.</p>
+            </div>
 
-      <!-- Upload zone -->
-      <div class="upload-zone" id="dropzone">
-        <input type="file" id="file-input" accept="image/*" />
-        <div class="upload-icon">
-          <svg viewBox="0 0 24 24">
-            <path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
-          </svg>
-        </div>
-        <p class="upload-label">
-          <strong>Click to upload</strong> or drag &amp; drop<br>
-          a photo of your math question (JPG, PNG, etc.)
-        </p>
-      </div>
+            <!-- Feature 2 -->
+            <div class="text-center p-6">
+                <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-brain text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Master Concepts</h3>
+                <p class="text-slate-600">Don't just get the answer. We explain the "why" and "how" behind every single step.</p>
+            </div>
 
-      <!-- Image preview -->
-      <div class="preview-wrap" id="preview-wrap">
-        <img id="preview-img" src="" alt="Uploaded math question" />
-        <button class="clear-btn" id="clear-btn" title="Remove image">✕</button>
-      </div>
+            <!-- Feature 3 -->
+            <div class="text-center p-6">
+                <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-repeat text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Practice Buddy</h3>
+                <p class="text-slate-600">Get 3 similar "helping questions" after every solution to ensure you've truly mastered the topic.</p>
+            </div>
+        </div>
+    </section>
 
-      <div class="divider">or type it below</div>
+    <!-- Simple Community CTA -->
+    <section class="py-20 bg-slate-100 px-6 border-t border-b border-slate-200">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-6">Ready to improve your grades?</h2>
+            <p class="text-lg text-slate-600 mb-8">
+                Join our exclusive WhatsApp community for early access, math tips, and direct support from the AI Maths Buddy team.
+            </p>
+            <a href="https://chat.whatsapp.com/G4goBOUoxJK3RjiI93VnYq" target="_blank" class="whatsapp-btn text-white px-12 py-5 rounded-2xl text-xl font-bold shadow-lg inline-flex items-center">
+                <i class="fab fa-whatsapp mr-3 text-2xl"></i> Join the Group Now
+            </a>
+            <p class="mt-4 text-sm text-slate-400 font-medium">100% Free • No Spam • Student Focused</p>
+        </div>
+    </section>
 
-      <!-- Text input -->
-      <div class="alt-input">
-        <label for="text-input">Type your question</label>
-        <textarea
-          id="text-input"
-          placeholder="e.g. Solve: 2x² – 5x + 3 = 0 using the quadratic formula"
-        ></textarea>
-      </div>
+    <!-- Compact Footer -->
+    <footer class="py-10 px-6 text-center text-slate-500 text-sm">
+        <div class="flex justify-center space-x-6 mb-4">
+            <a href="#" class="hover:underline">Contact</a>
+            <a href="#" class="hover:underline">Privacy</a>
+            <a href="#" class="hover:underline">Terms</a>
+        </div>
+        <p>&copy; 2024 AI Maths Buddy. All rights reserved.</p>
+    </footer>
 
-      <!-- Error -->
-      <div class="error-msg" id="error-msg"></div>
-
-      <!-- Submit -->
-      <button class="solve-btn" id="solve-btn">
-        Solve &amp; generate practice questions ↗
-      </button>
-
-      <!-- Loading indicator (hidden by default) -->
-      <div class="loading-row" id="loading-row" style="display:none;">
-        <div class="spinner"></div>
-        <span id="loading-text">Analyzing your question…</span>
-      </div>
-
-    </div><!-- /input-section -->
-
-    <!-- Result section -->
-    <div class="result-section" id="result-section">
-
-      <!-- Solution block -->
-      <div class="result-block">
-        <div class="result-block-header">
-          <span class="tag tag-solution">Solution</span>
-          <span class="result-title" id="topic-label">Step-by-step walkthrough</span>
-        </div>
-        <div class="solution-content" id="solution-text"></div>
-      </div>
-
-      <!-- Practice block -->
-      <div class="result-block">
-        <div class="result-block-header">
-          <span class="tag tag-practice">Practice</span>
-          <span class="result-title">Questions to strengthen the concept</span>
-        </div>
-        <ul class="practice-list" id="practice-list"></ul>
-      </div>
-
-      <button class="new-btn" id="new-btn">← Solve another question</button>
-
-    </div><!-- /result-section -->
-
-  </div><!-- /app -->
-
-  <!-- ============================================================
-       JAVASCRIPT
-  ============================================================ -->
-  <script>
-    // ── State ────────────────────────────────────────────────────
-    let imageBase64 = null;
-    let imageType   = null;
-
-    // ── DOM refs ─────────────────────────────────────────────────
-    const fileInput     = document.getElementById('file-input');
-    const dropzone      = document.getElementById('dropzone');
-    const previewWrap   = document.getElementById('preview-wrap');
-    const previewImg    = document.getElementById('preview-img');
-    const clearBtn      = document.getElementById('clear-btn');
-    const textInput     = document.getElementById('text-input');
-    const solveBtn      = document.getElementById('solve-btn');
-    const errorMsg      = document.getElementById('error-msg');
-    const loadingRow    = document.getElementById('loading-row');
-    const loadingText   = document.getElementById('loading-text');
-    const inputSection  = document.getElementById('input-section');
-    const resultSection = document.getElementById('result-section');
-    const topicLabel    = document.getElementById('topic-label');
-    const solutionText  = document.getElementById('solution-text');
-    const practiceList  = document.getElementById('practice-list');
-    const newBtn        = document.getElementById('new-btn');
-
-    // ── Image handling ────────────────────────────────────────────
-    fileInput.addEventListener('change', e => {
-      const file = e.target.files[0];
-      if (file) loadImage(file);
-    });
-
-    dropzone.addEventListener('dragover', e => {
-      e.preventDefault();
-      dropzone.classList.add('drag-over');
-    });
-
-    dropzone.addEventListener('dragleave', () => {
-      dropzone.classList.remove('drag-over');
-    });
-
-    dropzone.addEventListener('drop', e => {
-      e.preventDefault();
-      dropzone.classList.remove('drag-over');
-      const file = e.dataTransfer.files[0];
-      if (file && file.type.startsWith('image/')) loadImage(file);
-    });
-
-    clearBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      clearImage();
-    });
-
-    function loadImage(file) {
-      const reader = new FileReader();
-      reader.onload = ev => {
-        const result   = ev.target.result;
-        imageBase64    = result.split(',')[1];
-        imageType      = file.type;
-        previewImg.src = result;
-        previewWrap.style.display = 'block';
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function clearImage() {
-      imageBase64 = null;
-      imageType   = null;
-      previewImg.src = '';
-      previewWrap.style.display = 'none';
-      fileInput.value = '';
-    }
-
-    // ── UI helpers ────────────────────────────────────────────────
-    function showError(msg) {
-      errorMsg.textContent    = msg;
-      errorMsg.style.display  = 'block';
-    }
-
-    function hideError() {
-      errorMsg.style.display = 'none';
-    }
-
-    function setLoading(active, msg) {
-      solveBtn.disabled          = active;
-      solveBtn.textContent       = active ? 'Analyzing…' : 'Solve & generate practice questions ↗';
-      loadingRow.style.display   = active ? 'flex' : 'none';
-      if (msg) loadingText.textContent = msg;
-    }
-
-    // ── Main solve function ───────────────────────────────────────
-    solveBtn.addEventListener('click', solve);
-
-    async function solve() {
-      hideError();
-
-      const typedQ = textInput.value.trim();
-
-      if (!imageBase64 && !typedQ) {
-        showError('Please upload an image or type your question first.');
-        return;
-      }
-
-      setLoading(true, 'Analyzing your question…');
-
-      // Build message content
-      const userContent = [];
-
-      if (imageBase64) {
-        userContent.push({
-          type: 'image',
-          source: {
-            type:       'base64',
-            media_type: imageType,
-            data:       imageBase64
-          }
-        });
-      }
-
-      const prompt = buildPrompt(typedQ, !!imageBase64);
-      userContent.push({ type: 'text', text: prompt });
-
-      try {
-        setLoading(true, 'Solving the problem…');
-
-        const response = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model:      'claude-sonnet-4-20250514',
-            max_tokens: 1000,
-            messages: [{ role: 'user', content: userContent }]
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error(`API error: ${response.status}`);
-        }
-
-        const data  = await response.json();
-        const raw   = (data.content || []).map(b => b.text || '').join('').trim();
-        const clean = raw.replace(/```json|```/g, '').trim();
-        const parsed = JSON.parse(clean);
-
-        renderResults(parsed);
-
-      } catch (err) {
-        console.error(err);
-        showError('Something went wrong. Please check your question and try again.');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    // ── Prompt builder ────────────────────────────────────────────
-    function buildPrompt(typedQ, hasImage) {
-      const questionPart = typedQ
-        ? `Here is the math question${hasImage ? ' (also visible in the image above)' : ''}: "${typedQ}"`
-        : 'The math question is shown in the image above.';
-
-      return `${questionPart}
-
-Please:
-1. Identify the mathematical topic / concept being tested.
-2. Provide a clear, numbered, step-by-step solution.
-3. Generate exactly 5 practice questions that build the same concept, ordered from easier to harder.
-
-Respond ONLY with valid JSON — no markdown fences, no preamble, no trailing text.
-
-{
-  "topic": "Short topic name, e.g. Quadratic Equations",
-  "solution": "Full step-by-step solution as plain text",
-  "practice": [
-    "Question 1 (easiest)",
-    "Question 2",
-    "Question 3",
-    "Question 4",
-    "Question 5 (hardest)"
-  ]
-}`;
-    }
-
-    // ── Render results ────────────────────────────────────────────
-    function renderResults(data) {
-      // Topic label
-      topicLabel.textContent = data.topic || 'Step-by-step walkthrough';
-
-      // Solution
-      solutionText.textContent = data.solution || 'No solution returned.';
-
-      // Practice questions
-      practiceList.innerHTML = '';
-      const questions = Array.isArray(data.practice) ? data.practice : [];
-
-      questions.forEach((q, i) => {
-        const li = document.createElement('li');
-        li.className = 'practice-item';
-        li.innerHTML = `
-          <span class="q-num">Q${i + 1}</span>
-          <span class="q-text">${escapeHtml(q)}</span>
-          <span class="q-arrow">›</span>
-        `;
-        // Clicking a practice question opens a new tab / window with the question pre-filled
-        li.addEventListener('click', () => openPracticeQuestion(q));
-        practiceList.appendChild(li);
-      });
-
-      // Show results, hide input
-      inputSection.style.display = 'none';
-      resultSection.classList.add('visible');
-    }
-
-    // ── Practice question click ───────────────────────────────────
-    function openPracticeQuestion(question) {
-      // Pre-fill the text area for the next solve, then scroll to top
-      reset(false);
-      textInput.value = question;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // ── Reset ─────────────────────────────────────────────────────
-    newBtn.addEventListener('click', () => reset(true));
-
-    function reset(clearText) {
-      clearImage();
-      if (clearText) textInput.value = '';
-      solutionText.textContent = '';
-      practiceList.innerHTML   = '';
-      hideError();
-      inputSection.style.display = 'block';
-      resultSection.classList.remove('visible');
-    }
-
-    // ── Utility ───────────────────────────────────────────────────
-    function escapeHtml(str) {
-      return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
-  </script>
 </body>
 </html>
